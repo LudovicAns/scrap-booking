@@ -1,6 +1,6 @@
 import pandas
 from pandas import DataFrame
-
+import matplotlib.pyplot as plt
 
 def load_books(file_path: str) -> DataFrame:
     return pandas.read_csv(file_path)
@@ -23,6 +23,19 @@ def summary_by_rating(df: DataFrame) -> None:
         df.groupby(["rating", "price_type"])["price"].mean().reset_index().set_index("rating")
     )
 
+def plot_price_histogram(df: DataFrame) -> None:
+    plt.figure(figsize=(6, 4))
+    plt.hist(df['price'], bins=20, color='skyblue', edgecolor='black')
+    plt.title('Histogram du prix des livres')
+    plt.xlabel('Prix')
+    plt.ylabel('Fréquence')
+    plt.grid(True, linestyle='dashed', alpha=0.7)
+
+    # Save the histogram to a file
+    plt.savefig('../data/histogram_price.png')
+    plt.close()
+
+
 if __name__ == "__main__":
     books_df = load_books("../data/books.csv")
     print(describe_prices(books_df))
@@ -30,3 +43,7 @@ if __name__ == "__main__":
     print(availability_counts(books_df))
     print("-" * 100)
     print(summary_by_rating(books_df))
+
+    # Generate price histogram
+    plot_price_histogram(books_df)
+    print("Price histogram saved to '../data/histogram_price.png'")
