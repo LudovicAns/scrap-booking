@@ -36,6 +36,14 @@ def plot_price_histogram(df: DataFrame) -> None:
     plt.close()
 
 
+def plot_price_boxplot(df: DataFrame) -> None:
+    plt.figure(figsize=(6, 4))
+    plt.boxplot(df['price'])
+    plt.title('Boxplot du prix des livres')
+    plt.ylabel('Prix (£)')
+    plt.savefig('../data/boxplot_price.png')
+    plt.close()
+
 if __name__ == "__main__":
     books_df = load_books("../data/books.csv")
     print(describe_prices(books_df))
@@ -47,3 +55,7 @@ if __name__ == "__main__":
     # Generate price histogram
     plot_price_histogram(books_df)
     print("Price histogram saved to '../data/histogram_price.png'")
+
+    plot_price_boxplot(books_df)
+    print("Price boxplot saved to '../data/boxplot_price.png'")
+
