@@ -61,7 +61,9 @@ def scrap_all(max: int = 300) -> list[Webcam]:
                 rating_count = product.find("div", class_="dD8iuc d1BlKc").find("span").text.strip().translate(str.maketrans('', '', '()\u202f'))
                 vendor = product.find_all("div", class_="dD8iuc")[1].text.strip().split(' ')[2:]
 
-                webcams.append(Webcam(name, "https://google.com" + product_url, float(price), price_type, float(rating), int(rating_count), " ".join(vendor)))
+                webcam = Webcam(name, "https://google.com" + product_url, float(price), price_type, float(rating),
+                       int(rating_count), " ".join(vendor))
+                webcams.append(webcam)
 
             try :
                 next_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Suivant")
@@ -87,7 +89,7 @@ if __name__ == "__main__":
     webcams = []
     while not success and retry_count < max_retries:
         try:
-            webcams = scrap_all()
+            webcams = scrap_all(160)
         except Exception as e:
             retry_count += 1
             print(f"Tentative {retry_count}/{max_retries} échouée : {e}")
