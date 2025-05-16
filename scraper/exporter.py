@@ -1,4 +1,5 @@
 from scraper.book import Book
+from scraper.webcam import Webcam
 import csv
 
 
@@ -31,3 +32,20 @@ def export_books_to_csv(books: list[Book], file_path: str) -> None:
         # Write a row for each book
         for book in books:
             writer.writerow(book.to_dict())
+
+def export_webcam_to_csv(webcam_data: list[Webcam], file_path: str) -> None:
+    if not webcam_data:
+        return
+
+    # Get the field names from the first book's dictionary
+    fieldnames = webcam_data[0].to_dict().keys()
+    with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        # Write the header row
+        writer.writeheader()
+
+        # Write a row for each book
+        for webcam in webcam_data:
+            writer.writerow(webcam.to_dict())
+
