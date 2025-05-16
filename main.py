@@ -13,6 +13,6 @@ print(f"Nombre de livres scrapés: {len(books)}")
 
 webcams = scrape_all_webcam()
 
-export_webcam_to_csv(webcams, "./data/custom_products.csv")
+export_webcam_to_csv(webcams, "./data/webcams.csv")
 
 print(f"Nombre de webcams scrapés: {len(webcams)}")

@@ -7,6 +7,10 @@ import numpy as np
 def load_books(file_path: str) -> DataFrame:
     return pandas.read_csv(file_path)
 
+
+def load_webcams(file_path: str) -> DataFrame:
+    return pandas.read_csv(file_path)
+
 def describe_prices(df: DataFrame) -> None:
     print(
         df.groupby("price_type")["price"].describe()
@@ -25,25 +29,25 @@ def summary_by_rating(df: DataFrame) -> None:
         df.groupby(["rating", "price_type"])["price"].mean().reset_index().set_index("rating")
     )
 
-def plot_price_histogram(df: DataFrame) -> None:
+def plot_price_histogram(df: DataFrame, out: str) -> None:
     plt.figure(figsize=(6, 4))
     plt.hist(df['price'], bins=20, color='skyblue', edgecolor='black')
-    plt.title('Histogram du prix des livres')
+    plt.title('Histogram du prix')
     plt.xlabel('Prix')
     plt.ylabel('Fréquence')
     plt.grid(True, linestyle='dashed', alpha=0.7)
 
     # Save the histogram to a file
-    plt.savefig('../data/histogram_price.png')
+    plt.savefig(out)
     plt.close()
 
 
-def plot_price_boxplot(df: DataFrame) -> None:
+def plot_price_boxplot(df: DataFrame, out: str, product_title: str) -> None:
     plt.figure(figsize=(6, 4))
     plt.boxplot(df['price'])
-    plt.title('Boxplot du prix des livres')
-    plt.ylabel('Prix (£)')
-    plt.savefig('../data/boxplot_price.png')
+    plt.title('Boxplot du prix des')
+    plt.ylabel('Prix')
+    plt.savefig(out)
     plt.close()
 
 def plot_price_cluster(df: DataFrame) -> None:
@@ -87,21 +91,15 @@ def plot_cluster_distribution(df: DataFrame) -> None:
 
 if __name__ == "__main__":
     books_df = load_books("../data/books.csv")
-    print(describe_prices(books_df))
-    print("-" * 100)
-    print(availability_counts(books_df))
-    print("-" * 100)
-    print(summary_by_rating(books_df))
+    webcams_df = load_webcams("../data/webcams.csv")
 
     # Generate price histogram
-    plot_price_histogram(books_df)
-    print("Price histogram saved to '../data/histogram_price.png'")
+    plot_price_histogram(books_df, "../data/book_histogram_price.png")
+    plot_price_histogram(webcams_df, "../data/webcam_histogram_price.png")
 
-    plot_price_boxplot(books_df)
-    print("Price boxplot saved to '../data/boxplot_price.png'")
+    plot_price_boxplot(books_df, "../data/book_boxplot_price.png", "livres")
+    plot_price_boxplot(webcams_df, "../data/webcam_boxplot_price.png", "webcams")
 
     plot_price_cluster(books_df)
-    print("Price clustering scatter plot saved to '../data/clustering_price.png'")
 
     plot_cluster_distribution(books_df)
-    print("Price cluster distribution boxplot saved to '../data/cluster_distribution.png'")

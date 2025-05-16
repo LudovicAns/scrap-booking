@@ -48,4 +48,3 @@ def export_webcam_to_csv(webcam_data: list[Webcam], file_path: str) -> None:
         # Write a row for each book
         for webcam in webcam_data:
             writer.writerow(webcam.to_dict())
-
