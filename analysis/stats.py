@@ -45,7 +45,7 @@ def plot_price_histogram(df: DataFrame, out: str) -> None:
 def plot_price_boxplot(df: DataFrame, out: str, product_title: str) -> None:
     plt.figure(figsize=(6, 4))
     plt.boxplot(df['price'])
-    plt.title('Boxplot du prix des')
+    plt.title(f'Boxplot du prix des {product_title}')
     plt.ylabel('Prix')
     plt.savefig(out)
     plt.close()

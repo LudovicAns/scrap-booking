@@ -12,9 +12,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from scraper.webcam import Webcam
 
 query = "webcam"
-url = f"https://www.google.fr/shopping"
+url = f"https://www.google.com/shopping"
 
-def scrap_all() -> list[Webcam]:
+def scrap_all(max: int = 300) -> list[Webcam]:
     webcams = []
 
     # Configuration de selenium
@@ -45,9 +45,9 @@ def scrap_all() -> list[Webcam]:
         next = True
 
         iter = 0
-        while next and iter < 50:
+        while next and iter < 50 and len(webcams) < max:
             iter += 1
-            time.sleep(1.5)
+            time.sleep(0.75)
             # Parsing de la page de recherche
             soup = BeautifulSoup(driver.page_source, "html.parser")
             products = soup.find_all("div", class_="P8xhZc")
@@ -65,10 +65,14 @@ def scrap_all() -> list[Webcam]:
 
             try :
                 next_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Suivant")
-                next = next_element is not None
-                next_element.click()
             except NoSuchElementException:
-                next = False
+
+                try:
+                    next_element = driver.find_elements(By.CLASS_NAME, "lYtaR")[1]
+                except NoSuchElementException:
+                    break
+
+            next_element.click()
 
     finally:
         driver.quit()
@@ -94,5 +98,7 @@ if __name__ == "__main__":
         else:
             success = True
 
-    for webcam in webcams:
-        print(webcam)
+    #for webcam in webcams:
+    #    print(webcam)
+
+    print(f"Nombre de produits scrapés : {len(webcams)}")
